@@ -16,6 +16,7 @@ def write(medlines,out):
     out.close()
 
 def run(output_directory,limit=100000):
+    print "running on "+str(limit)+" records..."
     master = set()
 
     #
@@ -53,4 +54,4 @@ def run(output_directory,limit=100000):
 
     write(master, out)
 
-    return out
+    return output_directory+"informatics_resource_pmids.txt"
