@@ -111,11 +111,11 @@ def run(output_fp, pmids_fp, CHUNK_SIZE=200, LIMIT=1):
 
     ids = []
 
-    out_titles   = open(output_fp+SET_NAME+"_titles.txt","w" )
-    out_authors  = open(output_fp+SET_NAME+"_authors.txt","w" )
-    out_dates    = open(output_fp+SET_NAME+"_dates.txt","w" )
-    out_meshs    = open(output_fp+SET_NAME+"_meshs.txt","w" )
-    out_journals = open(output_fp+SET_NAME+"_journals.txt","w" )
+    out_titles   = open(output_fp+"informatics_resource_titles.txt","w" )
+    out_authors  = open(output_fp+"informatics_resource_authors.txt","w" )
+    out_dates    = open(output_fp+"informatics_resource_dates.txt","w" )
+    out_meshs    = open(output_fp+"informatics_resource_meshs.txt","w" )
+    out_journals = open(output_fp+"informatics_resource_journals.txt","w" )
 
     for l in open (pmids_fp,"r"):
 
@@ -164,7 +164,8 @@ def run(output_fp, pmids_fp, CHUNK_SIZE=200, LIMIT=1):
     out_dates.close()
     out_meshs.close()
     out_journals.close()
-    print "Done writing ."
+    print "Done writing."
+    return output_fp+"informatics_resource_titles.txt"
 
 
 if __name__ == '__main__':
