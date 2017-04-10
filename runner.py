@@ -38,12 +38,6 @@ if __name__ == '__main__':
                         required=False
                         )
 
-    parser.add_argument('-db_schema',
-                        dest='db_schema',
-                        help='DB schema to load data into',
-                        default='uindex_data',
-                        required=False)
-
     parser.add_argument('-db_cnf',
                         dest='db_cnf',
                         help='Configuration file where SQL username and password are stored.',
@@ -75,7 +69,7 @@ if __name__ == '__main__':
     resource_names_fp = run_toolname_extractor(args.output_directory, titles_fp)
 
     print "########################################################"
-    print "###            Creating u-Index database.            ###"
+    print "###      Creating and loading u-Index database.      ###"
     print "########################################################"
     run_db_loader(args.db_host,
                   args.sql_port,

@@ -74,7 +74,7 @@ def create_tables(db_handler):
     print "Finished creating tables."
 
 def load_pubmed_titles(data_file, db_handler):
-    print "Loading data into uindex_data.inf_resource_pubmed_title_test."
+    print "Loading data into uindex_data.inf_resource_pubmed_title."
     with open(data_file, 'r') as infile:
         reader = csv.reader(infile, delimiter="\t", quoting=csv.QUOTE_NONE)
         next(reader, None)
@@ -89,11 +89,11 @@ def load_pubmed_titles(data_file, db_handler):
                 print "Problem PMID: "+pmid
                 print("Error: {0}".format(err))
                 sys.exit()
-    print "Finished loading data into uindex_data.into inf_resource_pubmed_title_test ."
+    print "Finished loading data into uindex_data.into inf_resource_pubmed_title ."
 
 
 def load_pubmed_years(data_file, db_handler):
-    print "Loading data into uindex_data.inf_resource_pubmed_year_test."
+    print "Loading data into uindex_data.inf_resource_pubmed_year."
 
     with open(data_file, 'r') as infile:
         reader = csv.reader(infile, delimiter="\t", quoting=csv.QUOTE_NONE)
@@ -109,11 +109,11 @@ def load_pubmed_years(data_file, db_handler):
                 print "Problem PMID: "+pmid
                 print("Error: {0}".format(err))
                 sys.exit()
-    print "Finished loading data into uindex_data.inf_resource_pubmed_year_test."
+    print "Finished loading data into uindex_data.inf_resource_pubmed_year."
 
 
 def load_pubmed_keys(data_file, db_handler):
-    print "Loading data into uindex_data.inf_resource_pubmed_key_test."
+    print "Loading data into uindex_data.inf_resource_pubmed_key."
 
     with open(data_file, 'r') as infile:
         reader = csv.reader(infile, delimiter="|", quoting=csv.QUOTE_NONE)
@@ -131,7 +131,7 @@ def load_pubmed_keys(data_file, db_handler):
                 print "Problem PMID: "+pmid
                 print("Error: {0}".format(err))
                 sys.exit()
-    print "Finished loading data into uindex_data.inf_resource_pubmed_key_test."
+    print "Finished loading data into uindex_data.inf_resource_pubmed_key."
 
 def load_pmc_article_info(data_file, db_handler):
     print "Loading data into uindex_data.pmc_article_info."
@@ -148,7 +148,7 @@ def load_pmc_article_info(data_file, db_handler):
 
             sql = "INSERT INTO `uindex_data`.`pmc_article_info` VALUES(%s,%s,%s,%s,%s,%s);"
             try:
-                db_handler.execute(sql, (escape(pmcid), escape(pmid),escape(doi), escape(year), escape(journal),escape(heading)))
+                db_handler.execute(sql, (escape(pmcid), escape(pmid), escape(doi), escape(year), escape(journal),escape(heading)))
             except Exception as err:
                 print "Problem PMCID: "+pmcid
                 print("Error: {0}".format(err))
@@ -325,7 +325,7 @@ def generate_uindex_data(db_handler):
                                         "( " \
                                         "SELECT `uindex_data`.`inf_resource_pubmed_key`.`key`, COUNT(DISTINCT  `uindex_data`.`pmc_article_citation`.`pmcid`) as total " \
                                         "FROM `uindex_data`.`inf_resource_pubmed_title`, `uindex_data`.`inf_resource_pubmed_key`, `uindex_data`.`pmc_article_citation`, `uindex_data`.`pmc_research_articles`,  `uindex_data`.`pmc_article_info` " \
-                                        "WHERE `uindex_data`.`inf_resource_pubmed_titles`.pmid = `uindex_data`.`inf_resource_pubmed_key`.pmid " \
+                                        "WHERE `uindex_data`.`inf_resource_pubmed_title`.pmid = `uindex_data`.`inf_resource_pubmed_key`.pmid " \
                                         "AND `uindex_data`.`pmc_article_citation`.id = `uindex_data`.`inf_resource_pubmed_title`.pmid " \
                                         "AND `uindex_data`.`pmc_article_citation`.`id_type` = 'pmid' " \
                                         "AND `uindex_data`.`pmc_article_citation`.`pmcid` = `uindex_data`.`pmc_research_articles`.pmcid " \
@@ -361,8 +361,8 @@ def generate_uindex_data(db_handler):
     print "Finished generating uIndex data."
     return None
 
-def run(db_host, sql_port, db_schema, cnf_file, pmid_titles_fp, pmid_dates_fp, pmid_keys_fp, pmc_article_fp, pmc_ref_fp, pmc_section_fp):
-    myDB = MySQLdb.connect(host=db_host,port=sql_port,db=db_schema,read_default_file=cnf_file)
+def run(db_host, sql_port, cnf_file, pmid_titles_fp, pmid_dates_fp, pmid_keys_fp, pmc_article_fp, pmc_ref_fp, pmc_section_fp):
+    myDB = MySQLdb.connect(host=db_host,port=sql_port,read_default_file=cnf_file)
     cHandler = myDB.cursor()
 
     create_tables(cHandler)
