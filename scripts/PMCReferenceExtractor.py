@@ -1,6 +1,6 @@
 '''
-@author: winnenbr
-@author: alisoncallahan
+@author: Rainer Winnenburg
+@author: Alison Callahan
 '''
 
 from xml.dom import minidom

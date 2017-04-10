@@ -1,6 +1,6 @@
 '''
-@author: winnenbr
-@author: alisoncallahan
+@author: Rainer Winnenburg
+@author: Alison Callahan
 '''
 import urllib2
 from xml.dom import minidom

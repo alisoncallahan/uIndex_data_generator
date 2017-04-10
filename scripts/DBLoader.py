@@ -1,5 +1,5 @@
 '''
-@author: alisoncallahan
+@author: Alison Callahan
 '''
 import MySQLdb
 import csv
@@ -35,8 +35,14 @@ def create_tables(db_handler):
     db_handler.execute(sql6)
     print "Finished creating uindex_data.inf_resource_pubmed_key table..."
 
-    sql7 = "DROP TABLE IF EXISTS `uindex_data`.`pmc_article_info`;"
-    sql8 = "CREATE TABLE  `uindex_data`.`pmc_article_info` (" \
+    sql7 = "DROP TABLE IF EXISTS `uindex_data`.`inf_resource_earliest_pub_year`;"
+    sql8 = "CREATE TABLE uindex_data.inf_resource_earliest_pub_year (`key` varchar(50) NOT NULL, `earliest_publication_year` int(4));"
+    db_handler.execute(sql7)
+    db_handler.execute(sql8)
+    print "Finished creating uindex_data.inf_resource_earliest_pub_year table..."
+
+    sql9 = "DROP TABLE IF EXISTS `uindex_data`.`pmc_article_info`;"
+    sql10 = "CREATE TABLE  `uindex_data`.`pmc_article_info` (" \
            "`pmcid` varchar(75) NOT NULL, " \
            "`pmid` varchar(75), " \
            "`doi` varchar(75), " \
@@ -44,12 +50,12 @@ def create_tables(db_handler):
            "`journal` varchar(150), " \
            "`heading` TEXT" \
            ") CHARACTER SET utf8 ENGINE=MyISAM;"
-    db_handler.execute(sql7)
-    db_handler.execute(sql8)
+    db_handler.execute(sql9)
+    db_handler.execute(sql10)
     print "Finished creating uindex_data.pmc_article_info table..."
 
-    sql9 = "DROP TABLE IF EXISTS `uindex_data`.`pmc_article_citation`;"
-    sql10 = "CREATE TABLE  `uindex_data`.`pmc_article_citation` (" \
+    sql11 = "DROP TABLE IF EXISTS `uindex_data`.`pmc_article_citation`;"
+    sql12 = "CREATE TABLE  `uindex_data`.`pmc_article_citation` (" \
            "`pmcid` varchar(75) NOT NULL, " \
            "`ref_id` varchar(75) NOT NULL, " \
            "`section` varchar(100) DEFAULT 'UNKNOWN', " \
@@ -58,17 +64,17 @@ def create_tables(db_handler):
            "`id_type` varchar(10), " \
            "`id` varchar(75)" \
            ") CHARACTER SET utf8 ENGINE=MyISAM;"
-    db_handler.execute(sql9)
-    db_handler.execute(sql10)
+    db_handler.execute(sql11)
+    db_handler.execute(sql12)
     print "Finished creating uindex_data.pmc_article_citation table..."
 
-    sql11 = "DROP TABLE IF EXISTS `uindex_data`.`pmc_article_section`;"
-    sql12 = "CREATE TABLE  `uindex_data`.`pmc_article_section` (" \
+    sql13 = "DROP TABLE IF EXISTS `uindex_data`.`pmc_article_section`;"
+    sql14 = "CREATE TABLE  `uindex_data`.`pmc_article_section` (" \
            "`pmcid` varchar(75) NOT NULL, " \
            "`section` TEXT " \
            ") CHARACTER SET utf8 ENGINE=MyISAM;"
-    db_handler.execute(sql11)
-    db_handler.execute(sql12)
+    db_handler.execute(sql13)
+    db_handler.execute(sql14)
     print "Finished creating uindex_data.pmc_article_section table..."
 
     print "Finished creating tables."
@@ -133,9 +139,22 @@ def load_pubmed_keys(data_file, db_handler):
                 sys.exit()
     print "Finished loading data into uindex_data.inf_resource_pubmed_key."
 
+def load_pubmed_earliest_pub_year(db_handler):
+    print "Loading data into uindex_data.inf_resource_earliest_pub_year."
+    sql = "INSERT INTO `uindex_data`.`inf_resource_earliest_pub_year` " \
+          "SELECT a.`key`, MIN(b.`year`) " \
+          "FROM `uindex_data`.`inf_resource_pubmed_key` a, `uindex_data`.`inf_resource_pubmed_year` b " \
+          "WHERE a.`pmid` = b.`pmid`" \
+          "GROUP BY a.`key`;"
+    try:
+        db_handler.execute(sql)
+    except Exception as err:
+        print("Error: {0}".format(err))
+        sys.exit()
+    print "Finished loading data into uindex_data.inf_resource_earliest_pub_year."
+
 def load_pmc_article_info(data_file, db_handler):
     print "Loading data into uindex_data.pmc_article_info."
-
     with open(data_file, 'r') as infile:
         reader = csv.reader(infile, delimiter="\t", quoting=csv.QUOTE_NONE)
         for row in reader:
@@ -330,7 +349,7 @@ def generate_uindex_data(db_handler):
                                         "AND `uindex_data`.`pmc_article_citation`.`id_type` = 'pmid' " \
                                         "AND `uindex_data`.`pmc_article_citation`.`pmcid` = `uindex_data`.`pmc_research_articles`.pmcid " \
                                         "AND `uindex_data`.`pmc_article_citation`.`pmcid` = `uindex_data`.`pmc_article_info`.pmcid " \
-                                        "AND `uindex_data`.`pmc_article_info`.`year` < 2016 " \
+                                        "AND `uindex_data`.`pmc_article_info`.`year` < 2018 " \
                                         "GROUP BY `uindex_data`.`inf_resource_pubmed_key`.key " \
                                         "ORDER BY count(distinct `uindex_data`.`pmc_article_citation`.`pmcid`) DESC " \
                                         ") AS inte1 " \
@@ -343,7 +362,7 @@ def generate_uindex_data(db_handler):
                                         "AND `uindex_data`.`pmc_article_citation`.`id_type` = 'pmid'" \
                                         "AND `uindex_data`.`pmc_article_citation`.`pmcid` = `uindex_data`.`pmc_research_articles`.pmcid " \
                                         "AND `uindex_data`.`pmc_article_citation`.`pmcid` = `uindex_data`.`pmc_article_info`.pmcid " \
-                                        "AND `uindex_data`.`pmc_article_info`.`year` < 2016 " \
+                                        "AND `uindex_data`.`pmc_article_info`.`year` < 2018 " \
                                         "AND (`uindex_data`.`pmc_article_citation`.`section` LIKE '%ethod%'  OR (`uindex_data`.`pmc_article_citation`.`section` LIKE '%material%' AND `uindex_data`.`pmc_article_citation`.`section` NOT LIKE '%supplement%')) " \
                                         "GROUP BY `uindex_data`.`inf_resource_pubmed_key`.key " \
                                         ") AS inte2 " \
@@ -356,8 +375,30 @@ def generate_uindex_data(db_handler):
     except Exception as err:
         print("Error: {0}".format(err))
         sys.exit()
-
     print "Finished generating uIndex citation data for 2015."
+
+    sql = "DROP TABLE IF EXISTS `uindex_data`.`uindex_2015`;"
+    db_handler.execute(sql)
+    sql = "CREATE TABLE `uindex_data`.`uindex_2015` (`key` varchar(75) NOT NULL, `usage_ratio` decimal(28,4), `uindex` decimal(28,4)) CHARACTER SET utf8 ENGINE=MyISAM;"
+    try:
+        db_handler.execute(sql)
+    except Exception as err:
+        print("Error: {0}".format(err))
+        sys.exit()
+
+    uindex_sql = "INSERT INTO `uindex_data`.`uindex_2015` " \
+                 "SELECT a.`key` AS `key`, " \
+                 "CASE WHEN total = used THEN 1 ELSE used/aware END AS usage_ratio, " \
+                 "(CASE WHEN total = used THEN 1 ELSE used/aware END)*aware/(2018-b.`earliest_publication_year`) AS u_index " \
+                 "FROM `uindex_data`.citation_counts_2015 a, uindex_data.inf_resource_earliest_pub_year b " \
+                 "WHERE a.`key`=b.`key`"
+    try:
+        db_handler.execute(uindex_sql)
+    except Exception as err:
+        print("Error: {0}".format(err))
+        sys.exit()
+    print "Finished generating usage ratio and uIndex values for 2015."
+
     print "Finished generating uIndex data."
     return None
 
@@ -373,4 +414,5 @@ def run(db_host, sql_port, cnf_file, pmid_titles_fp, pmid_dates_fp, pmid_keys_fp
     load_pmc_article_citations(pmc_ref_fp, cHandler)
     load_pmc_article_sections(pmc_section_fp, cHandler)
     index_tables(cHandler)
+    load_pubmed_earliest_pub_year(cHandler)
     generate_uindex_data(cHandler)

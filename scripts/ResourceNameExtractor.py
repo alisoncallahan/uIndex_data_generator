@@ -1,6 +1,6 @@
 '''
-@author: winnenbr
-@author: alisoncallahan
+@author: Rainer Winnenburg
+@author: Alison Callahan
 '''
 
 import re
@@ -283,8 +283,9 @@ def run(output_directory, in_fp):
 
     out = open(output_directory+"informatics_resource_extracted_names.txt","w")
     inf = open(in_fp, "rU")
-    nl = sum(1 for _ in inf)
+    nl = 0
     for l in inf.readlines():
+        nl +=1
         pmid = l.split("\t")[0]
         title = clean(l.split("\t")[1].strip())
 
@@ -304,6 +305,7 @@ def run(output_directory, in_fp):
 
         if not re.match("[0-9][0-9][0-9][0-9].*",extracted.split("|")[1]):
             out.write(pmid+"|"+extracted.lower()+"|"+title+"\n")
+
     print "Extracted resource names from "+str(nl)+" PubMed records."
     out.close()
     return output_directory+"informatics_resource_extracted_names.txt"
