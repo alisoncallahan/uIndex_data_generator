@@ -16,7 +16,6 @@ def write(medlines,out):
     out.close()
 
 def run(output_directory,limit=100000):
-    print "running on "+str(limit)+" records..."
     master = set()
 
     #
@@ -47,6 +46,7 @@ def run(output_directory,limit=100000):
     for pmid in returnIDs(q):
         master.add(pmid)
 
+    print "Downloaded "+str(len(master))+" PubMed IDs."
     #
     # Write Pubmed IDs
     #

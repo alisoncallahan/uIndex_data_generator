@@ -277,7 +277,9 @@ def extractDatabase(l):
 def run(output_directory, in_fp):
 
     out = open(output_directory+"informatics_resource_extracted_names.txt","w")
-    for l in open(in_fp):
+    inf = open(in_fp, "rU")
+    nl = sum(1 for _ in inf)
+    for l in inf.readlines():
         pmid = l.split("\t")[0]
         title = clean(l.split("\t")[1].strip())
 
@@ -297,43 +299,6 @@ def run(output_directory, in_fp):
 
         if not re.match("[0-9][0-9][0-9][0-9].*",extracted.split("|")[1]):
             out.write(pmid+"|"+extracted.lower()+"|"+title+"\n")
+    print "Extracted resource names from "+str(nl)+" PubMed records."
     out.close()
     return output_directory+"informatics_resource_extracted_names.txt"
-
-
-if __name__ == '__main__':
-
-    ###########################################
-    # Use different extraction mechanisms to extract tool name from paper title
-    #
-    # First token, database and software patterns, and last token
-    #############################################
-
-
-    in_dir  = os.path.abspath(os.curdir)+"/in/"
-    out_dir = os.path.abspath(os.curdir)+"/out/"
-
-
-    SET_NAME = "informatics_resource"
-    out = open(out_dir+SET_NAME+"_extracted_synons.txt","w")
-    for l in open(out_dir+SET_NAME+"_titles.txt","r"):
-        pmid = l.split("\t")[0]
-        title = clean(l.split("\t")[1].strip())
-
-        extrac = extractColon(title,":"," ")
-        if extrac.split("|")[1] == "":
-            extrac = extractColon(title,"--","")
-        if extrac.split("|")[1] == "":
-            extrac = extractColon(title,","," ")
-        if extrac.split("|")[1] == "":
-            extrac = extractDatabase(title)
-        if extrac.split("|")[1] == "":
-            extrac = extractSoftware(title)
-        if extrac.split("|")[1] == "":
-            extrac = extractDatabaseBroad(title)
-        if extrac.split("|")[1] == "":
-            extrac = extractLastToken(title)    
-
-        if not re.match("[0-9][0-9][0-9][0-9].*",extrac.split("|")[1]):
-            out.write(pmid+"|"+extrac+"|"+title+"\n")    
-    out.close()

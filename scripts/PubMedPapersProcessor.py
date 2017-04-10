@@ -136,9 +136,7 @@ def run(output_fp, pmids_fp, CHUNK_SIZE=200, LIMIT=1):
         data = []
         for j in range(start, end):
             data.append(ids[j])
-        print str(start)+"/"+str(end)
-        print len(data)
-
+        print "Processing records "+str(start)+" - "+str(end)+"."
 
         titles, authors, dates, meshs, journals = returnTitles(data)
 
@@ -159,13 +157,13 @@ def run(output_fp, pmids_fp, CHUNK_SIZE=200, LIMIT=1):
             print "Error with:"
             print mes[0]
 
+    print "Processed "+str(len(ids)) +" PubMed records."
     out_titles.close()
     out_authors.close()
     out_dates.close()
     out_meshs.close()
     out_journals.close()
-    print "Done writing."
-    return output_fp+"informatics_resource_titles.txt"
+    return output_fp+"informatics_resource_titles.txt", output_fp+"informatics_resource_dates.txt"
 
 
 if __name__ == '__main__':

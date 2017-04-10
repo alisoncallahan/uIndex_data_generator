@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from xml.dom import minidom
 import os  
-import sys
 import codecs
 import re
 
@@ -750,77 +749,53 @@ def read(file):
 
     return lines_error,  lines_output, lines_article, lines_section
 
-def call(fn):
+def call(fn, citations_fh, article_info_fh, article_sections_fh, error_fh):
     try:
 
         myfile = open(fn,"r")
         error, data, article, sections = read(myfile)
 
         ################################
-        # Write output files
+        # Write to output files
         ################################
 
         if len(data)>0:
             for l in data:
-                out.write(l+"\n")
+                citations_fh.write(l + "\n")
      
         if len(article)>0:
             for l in article:
-                out_article.write(l+"\n")
+                article_info_fh.write(l + "\n")
 
         if len(error)>0:    
             for l in error:
-                out_errors.write(l+"\n")
+                error_fh.write(l + "\n")
                 
         if len(sections)>0:    
             for l in sections:
-                out_sections.write(l+"\n")
+                article_sections_fh.write(l + "\n")
     except:
-        out_errors.write("iERROR\t"+str(fn)+"\n")
+        error_fh.write("iERROR\t" + str(fn) + "\n")
 
 def run(input_dir, output_dir):
-    out =          codecs.open(out_dir+"pmc_reference_data.txt","w", "utf-8")
-    out_article =  codecs.open(out_dir+"pmc_reference_article.txt","w", "utf-8")
-    out_errors =   codecs.open(out_dir+"pmc_reference_error.txt","w", "utf-8")
-    out_sections = codecs.open(out_dir+"pmc_reference_sections.txt","w", "utf-8")
+    citations_fh =          codecs.open(output_dir+"pmc_reference_citations.txt","w", "utf-8")
+    article_info_fh =  codecs.open(output_dir+"pmc_reference_article.txt","w", "utf-8")
+    article_sections_fh = codecs.open(output_dir+"pmc_reference_sections.txt","w", "utf-8")
+    error_fh =   codecs.open(output_dir+"pmc_reference_error.txt","w", "utf-8")
 
-    for root, subFolders, files in os.walk(in_dir):
+    for root, subFolders, files in os.walk(input_dir):
         try:
-
             for f in files:
                 print "Processing: "+os.path.join(root,f)
-                call(os.path.join(root,f))
+                call(os.path.join(root,f), citations_fh, article_info_fh, article_sections_fh, error_fh)
 
         except:
-            out_errors.write("eERROR\t"+str(root)+"\n")
+            error_fh.write("eERROR\t"+str(root)+"\n")
 
-    out.close()
-    out_article.close()
-    out_sections.close()
-    out_errors.close()
+    citations_fh.close()
+    article_info_fh.close()
+    article_sections_fh.close()
+    error_fh.close()
 
-if __name__ == '__main__':
-    
-    out_dir = os.path.abspath(os.curdir)+"/out_test/"
-    in_dir  = os.path.abspath(os.curdir)+"/in/"
-
-    out =          codecs.open(out_dir+"pmc_reference_data.txt","w", "utf-8")
-    out_article =  codecs.open(out_dir+"pmc_reference_article.txt","w", "utf-8")
-    out_errors =   codecs.open(out_dir+"pmc_reference_error.txt","w", "utf-8")
-    out_sections = codecs.open(out_dir+"pmc_reference_sections.txt","w", "utf-8")
-
-    for root, subFolders, files in os.walk(in_dir):
-        try:
-
-            for f in files:
-                print "Processing: "+os.path.join(root,f)
-                call( os.path.join(root,f))
-          
-        except:
-            out_errors.write("eERROR\t"+str(root)+"\n")
-            
-    out.close()
-    out_article.close()
-    out_errors.close()
-    out_sections.close()
+    return output_dir+"pmc_reference_article.txt", output_dir+"pmc_reference_citations.txt", output_dir+"pmc_reference_sections.txt"
     
