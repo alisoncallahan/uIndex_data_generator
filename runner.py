@@ -9,7 +9,6 @@ from scripts.PubMedPapersProcessor import  run as run_pubmed_processor
 from scripts.ResourceNameExtractor import run as run_toolname_extractor
 from scripts.DBLoader import run as run_db_loader
 if __name__ == '__main__':
-    #host="shahlab-db1.stanford.edu",port=3306,db="user_acallaha"
     parser = argparse.ArgumentParser(description = "Run uIndex data generator.")
 
     parser.add_argument('-i',
@@ -81,6 +80,3 @@ if __name__ == '__main__':
                   pmc_reference_fp,
                   pmc_sections_fp
                   )
-
-
-    ## TODO write the rest

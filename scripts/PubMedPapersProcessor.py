@@ -106,11 +106,16 @@ def returnTitles(pmid_list):
             
     return retts, retsa, retsd, retsh, retjs
 
-def run(output_fp, pmids_fp, CHUNK_SIZE=200, LIMIT=1):
+def run(output_fp, pmids_fp, CHUNK_SIZE=200):
+    ##############################################################################
+    ##
+    ## Create tab delimited files that can be loaded into SQL tables
+    ## (XML files (each for a batch of PubMed Articles) -> tab-files )
+    ##
+    ##############################################################################
+
     CHUNK_SIZE = 200
     COLUMN_SEPARATOR = "," #= "\t"
-    SET_NAME = "informatics_resource"
-
 
     ids = []
 
@@ -167,75 +172,3 @@ def run(output_fp, pmids_fp, CHUNK_SIZE=200, LIMIT=1):
     out_meshs.close()
     out_journals.close()
     return output_fp+"informatics_resource_titles.txt", output_fp+"informatics_resource_dates.txt"
-
-
-if __name__ == '__main__':
-
-    ##############################################################################
-    ##
-    ## Create tab delimited files that can be loaded into SQL tables
-    ## (XML files (each for a batch of PubMed Articles) -> tab-files )
-    ##
-    ##############################################################################
-
-    CHUNK_SIZE = 200
-    COLUMN_SEPARATOR = "," #= "\t"
-    SET_NAME = "informatics_resource"
-    in_dir  = "./out/"
-    out_dir = "./out/"
-
-    ids = []
-    
-    out_titles   = open(out_dir+SET_NAME+"_titles.txt","w" )
-    out_authors  = open(out_dir+SET_NAME+"_authors.txt","w" )
-    out_dates    = open(out_dir+SET_NAME+"_dates.txt","w" )
-    out_meshs    = open(out_dir+SET_NAME+"_meshs.txt","w" )
-    out_journals = open(out_dir+SET_NAME+"_journals.txt","w" )
-    
-    for l in open (in_dir+SET_NAME+"_pmids.txt","r"):
-    
-        pid = l.strip().split(COLUMN_SEPARATOR)[0]
-        
-        #skip header
-        if pid!="PMID":
-            ids.append(pid)
-            
-    for i in range(0,(len(ids)/CHUNK_SIZE)+1):
-        
-        start = CHUNK_SIZE*i
-        end = ((i+1)*CHUNK_SIZE)
-        
-        if len(ids)<end:
-            end = len(ids)
-            
-        data = []    
-        for j in range(start, end):
-            data.append(ids[j])
-        print str(start)+"/"+str(end)
-        print len(data)
-        
-        
-        titles, authors, dates, meshs, journals = returnTitles(data)
-
-        try:
-            for l in titles:
-                out_titles.write(l.encode('utf8').strip()+"\n")
-            for a in authors:
-                out_authors.write(a.encode('utf8').strip()+"\n")     
-            for d in dates:
-                out_dates.write(d.encode('utf8').strip()+"\n")
-            for j in journals:
-                out_journals.write(j.encode('utf8').strip()+"\n")
-            for h in meshs:
-                mes  = h.split("\t")
-                for i in mes[1:]:
-                    out_meshs.write(mes[0]+"|"+i.encode('utf8').strip()+"\n")
-        except:
-            print "Error with:"
-            print mes[0]
-                    
-    out_titles.close()
-    out_authors.close()
-    out_dates.close()
-    out_meshs.close()
-    out_journals.close()
