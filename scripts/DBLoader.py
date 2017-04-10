@@ -11,6 +11,9 @@ def escape(str):
 
 def create_tables(db_handler):
 
+    sql0 = "CREATE SCHEMA IF NOT EXISTS `uindex_data`;"
+    db_handler.execute(sql0)
+
     sql1 = "DROP TABLE IF EXISTS `uindex_data`.`inf_resource_pubmed_title`;"
     sql2 = "CREATE TABLE `uindex_data`.`inf_resource_pubmed_title` (`pmid` varchar(50) NOT NULL,`title` text) CHARACTER SET utf8 ENGINE=MyISAM;"
     db_handler.execute(sql1)
