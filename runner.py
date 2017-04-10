@@ -73,7 +73,6 @@ if __name__ == '__main__':
     print "########################################################"
     run_db_loader(args.db_host,
                   args.sql_port,
-                  args.db_schema,
                   args.db_cnf,
                   titles_fp,
                   dates_fp,
