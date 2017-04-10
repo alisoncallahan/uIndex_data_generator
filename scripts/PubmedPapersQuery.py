@@ -1,3 +1,7 @@
+'''
+@author: winnenbr
+@author: alisoncallahan
+'''
 import urllib2
 from xml.dom import minidom
 
@@ -46,6 +50,7 @@ def run(output_directory,limit=100000):
     for pmid in returnIDs(q):
         master.add(pmid)
 
+    print "Downloaded "+str(len(master))+" PubMed IDs."
     #
     # Write Pubmed IDs
     #
@@ -53,4 +58,4 @@ def run(output_directory,limit=100000):
 
     write(master, out)
 
-    return out
+    return output_directory+"informatics_resource_pmids.txt"
