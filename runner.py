@@ -1,5 +1,7 @@
-import sys
-import os
+'''
+@author: alisoncallahan
+'''
+
 import argparse
 from scripts.PMCReferenceExtractor import run as run_pmc_extractor
 from scripts.PubmedPapersQuery import run as run_pubmed_query

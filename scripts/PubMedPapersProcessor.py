@@ -1,6 +1,9 @@
+'''
+@author: winnenbr
+@author: alisoncallahan
+'''
 import urllib2
 from xml.dom import minidom
-import os
 
 def returnTitles(pmid_list):
 

@@ -1,3 +1,8 @@
+'''
+@author: winnenbr
+@author: alisoncallahan
+'''
+
 import re
 import os
 import imp

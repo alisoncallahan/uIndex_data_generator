@@ -1,4 +1,8 @@
-# -*- coding: utf-8 -*-
+'''
+@author: winnenbr
+@author: alisoncallahan
+'''
+
 from xml.dom import minidom
 import os  
 import codecs
@@ -778,10 +782,10 @@ def call(fn, citations_fh, article_info_fh, article_sections_fh, error_fh):
         error_fh.write("iERROR\t" + str(fn) + "\n")
 
 def run(input_dir, output_dir):
-    citations_fh =          codecs.open(output_dir+"pmc_reference_citations.txt","w", "utf-8")
-    article_info_fh =  codecs.open(output_dir+"pmc_reference_article.txt","w", "utf-8")
+    citations_fh = codecs.open(output_dir+"pmc_reference_citations.txt","w", "utf-8")
+    article_info_fh = codecs.open(output_dir+"pmc_reference_article.txt","w", "utf-8")
     article_sections_fh = codecs.open(output_dir+"pmc_reference_sections.txt","w", "utf-8")
-    error_fh =   codecs.open(output_dir+"pmc_reference_error.txt","w", "utf-8")
+    error_fh = codecs.open(output_dir+"pmc_reference_error.txt","w", "utf-8")
 
     for root, subFolders, files in os.walk(input_dir):
         try:
