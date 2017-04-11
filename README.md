@@ -3,7 +3,7 @@
 Generate a SQL database from PubMed and PubMedCentral records to calculate the uIndex for informatics resources.
 
 ### Usage:
-    python runner.py [options] <path>
+    python runner.py [options]
 
 ### Options:
     --i [--indir]         Directory containing PMC XML files (required)
