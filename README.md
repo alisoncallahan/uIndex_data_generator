@@ -7,11 +7,10 @@ Generate a SQL database from PubMed and PubMedCentral records to calculate the u
 
 ### Options:
     --i [--indir]         Directory containing PMC XML files (required)
-    --o [--outdir]        Directory where output will be written
+    --o [--outdir]        Directory where output will be written (required)
     --db_cnf              Configuration file where SQL username 
                           and password are stored (default: ~/.my.cnf)
     --db_host             SQL database host (default: localhost)
-    --debug               Print debug information
     --sql_port            Port where SQL server is running (default: 3306)
     
 ### Requirements:
