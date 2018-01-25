@@ -6,7 +6,7 @@ All you need to get started is a directory containing the set of PubMed Central 
 
 To download PMC XML files for your citing universe, follow the instructions to use the NCBI's FTP service for the PubMed Central Open Access subset: https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/.
 
-The methods to extract citations from the PMC XML files, retrieve PubMed records for informatics resources, and count the nubmer of usage and awareness citations in order to calcuate the u-Index are ready to use out-of-the-box, as detailed below. 
+The methods to extract citations from the PMC XML files, retrieve PubMed records for informatics resources, and count the number of usage and awareness citations in order to calcuate the u-Index are ready to use out-of-the-box, as detailed below. 
 
 The code consists of scripts to: 
   1. extract references and citations from PMC XML files ('scripts/PMCReferenceExtractor.py')
