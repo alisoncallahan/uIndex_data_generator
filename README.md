@@ -1,6 +1,6 @@
 ## uIndex_data_generator
 
-The uIndex_data_generator generates an SQL database from PubMed and PubMedCentral records to calculate the uIndex for informatics resources.
+The uIndex_data_generator generates an SQL database from PubMed and PubMedCentral records to calculate the u-Index for informatics resources.
 
 All you need to get started is a directory containing the set of PubMed Central (PMC) XML files that represent the citing universe of interest, and a MySQL instance running. 
 
