@@ -13,7 +13,7 @@ The code consists of scripts to:
   2. query PubMed for informatics resource articles ('scripts/PubMedPapersQuery.py')
   3. extract information (PMID, title, authors, publication date, MeSH terms) from the retrieved records ('scripts/PubMedPapersProcessor.py')
   4. extract resource names from these records ('scripts/ResourceNameExtractor.py')
-  5. load the output of each of these scripts into a SQL database ('scripts/DBLoader.py'). 
+  5. load the output of each of these scripts into a SQL database, count usage and awareness citations ('scripts/DBLoader.py'). 
 
 'runner.py' runs each script in sequence from (1) - (5), using the options specified below.
 
